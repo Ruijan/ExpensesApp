@@ -6,6 +6,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class SignUp extends AppCompatActivity {
 
@@ -16,11 +18,13 @@ public class SignUp extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        Button signupButton = findViewById(R.id.signup);
+
+        signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                EditText email = ((EditText)findViewById(R.id.email));
+                Snackbar.make(view, email.getText(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
