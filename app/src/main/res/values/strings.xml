@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Expenses</string>
     <!-- Strings related to login -->
+    <string name="prompt_last_name">Last Name</string>
+    <string name="prompt_example_last_name">Doe</string>
+    <string name="prompt_first_name">First Name</string>
+    <string name="prompt_example_first_name">John</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_example_email">email@example.com</string>
     <string name="prompt_password">Password</string>
