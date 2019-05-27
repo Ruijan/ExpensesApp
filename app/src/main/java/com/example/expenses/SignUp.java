@@ -1,21 +1,15 @@
 package com.example.expenses;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.DataOutputStream;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.android.volley.toolbox.StringRequest;
@@ -36,67 +30,66 @@ public class SignUp extends AppCompatActivity {
 
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                //try {
+            public void onClick(final View view) {
 
-// Instantiate the RequestQueue.
-                    RequestQueue queue = Volley.newRequestQueue(view.getContext());
-                    String url ="http://heroku.com/BackEnd/index.php";
+            RequestQueue queue = Volley.newRequestQueue(view.getContext());
+            String baseUrl ="http://pixelnos-ledger-api.herokuapp.com/BackEnd/index.php?action=connection/";
 
-// Request a string response from the provided URL.
-                    StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    // Display the first 500 characters of the response string.
-                                    System.out.println("Response is: "+ response.substring(0,500));
-                                }
-                            }, new Response.ErrorListener() {
+            StringRequest signUpRequest = new StringRequest(Request.Method.POST, baseUrl + "SignUp",
+                    new Response.Listener<String>() {
                         @Override
-                        public void onErrorResponse(VolleyError error) {
-                            System.out.println("That didn't work!");
+                        public void onResponse(String response) {
+                            // Display the first 500 characters of the response string.
+                            System.out.println("Response is: "+ response);
                         }
-                    });
-
-// Add the request to the RequestQueue.
-                    queue.add(stringRequest);
-
-                    /*URL url = new URL("http://example.com");
-                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                    con.setRequestMethod("POST");
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    System.out.println("That didn't work!" + error.getMessage());
+                }
+            }){
+                protected Map<String, String> getParams() {
                     EditText email = ((EditText) findViewById(R.id.email));
-                    Snackbar.make(view, email.getText(), Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    Map<String, String> parameters = new HashMap<>();
-                    parameters.put("param1", "val");
+                    EditText password = ((EditText) findViewById(R.id.password));
+                    EditText firstName = ((EditText) findViewById(R.id.firstName));
+                    EditText LastName = ((EditText) findViewById(R.id.lastName));
+                    Map<String, String> MyData = new HashMap<String, String>();
+                    MyData.put("email", email.getText().toString()); //Add the data you'd like to send to the server.
+                    MyData.put("password", password.getText().toString()); //Add the data you'd like to send to the server.
+                    MyData.put("first_name", firstName.getText().toString()); //Add the data you'd like to send to the server.
+                    MyData.put("last_name", LastName.getText().toString()); //Add the data you'd like to send to the server.
+                    return MyData;
+                }
+            };
+            StringRequest signInRequest = new StringRequest(Request.Method.POST, baseUrl + "SignIn",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            // Display the first 500 characters of the response string.
+                            if(response == "Connected"){
+                                Intent dashboard = new Intent(view.getContext(), DashBoard.class);
+                                startActivity(dashboard);
 
-                    con.setDoOutput(true);
-                    DataOutputStream out = new DataOutputStream(con.getOutputStream());
-                    String urlParameters = ParametersStringBuilder.getParamsString(parameters);
-                    out.writeBytes(urlParameters);
-                    out.flush();
-                    out.close();
-                    int responseCode = con.getResponseCode();
-                    System.out.println("\nSending 'POST' request to URL : " + url);
-                    System.out.println("Post parameters : " + urlParameters);
-                    System.out.println("Response Code : " + responseCode);
-
-                    BufferedReader in = new BufferedReader(
-                            new InputStreamReader(con.getInputStream()));
-                    String inputLine;
-                    StringBuffer response = new StringBuffer();
-
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-                    in.close();
-
-                    //print result
-                    System.out.println(response.toString());*/
-                /*}
-                catch(IOException e){
-                    e.printStackTrace();
-                }*/
+                            }
+                            System.out.println("Response is: "+ response);
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    System.out.println("That didn't work!" + error.getMessage());
+                }
+            }){
+                protected Map<String, String> getParams() {
+                    EditText email = ((EditText) findViewById(R.id.email));
+                    EditText password = ((EditText) findViewById(R.id.password));
+                    Map<String, String> MyData = new HashMap<String, String>();
+                    MyData.put("email", email.getText().toString()); //Add the data you'd like to send to the server.
+                    MyData.put("password", password.getText().toString()); //Add the data you'd like to send to the server.
+                    return MyData;
+                }
+            };
+            queue.add(signUpRequest);
+            queue.add(signInRequest);
             }
         });
     }
